@@ -2070,6 +2070,49 @@ This course is still in draft while the cluster examples are rewritten against t
 
   console.log(`Created ${countRows(schema.lessonProgress)} lesson progress records.`);
 
+  // ─── Bookmarks and Notes ───
+  // Private to each Student — only they see these, on the Lesson page and /saved.
+
+  db.insert(schema.bookmarks)
+    .values([
+      { userId: students[0].id, lessonId: course1LessonIds[3], createdAt: daysAgo(47) },
+      { userId: students[0].id, lessonId: course1LessonIds[12], createdAt: daysAgo(38) },
+      { userId: students[0].id, lessonId: course2LessonIds[5], createdAt: daysAgo(35) },
+      { userId: students[2].id, lessonId: course1LessonIds[1], createdAt: daysAgo(29) },
+      { userId: students[2].id, lessonId: course2LessonIds[6], createdAt: daysAgo(22) },
+    ])
+    .run();
+
+  db.insert(schema.notes)
+    .values([
+      {
+        userId: students[0].id,
+        lessonId: course1LessonIds[3],
+        body: "Come back to this one.\n\nThe bit about narrowing with `in` didn't click — rewatch from about 6:00.",
+        createdAt: daysAgo(47),
+        updatedAt: daysAgo(44),
+      },
+      {
+        userId: students[0].id,
+        lessonId: course2LessonIds[5],
+        body: "# Status codes to remember\n* 201 for created\n* 204 for no body",
+        createdAt: daysAgo(35),
+        updatedAt: daysAgo(35),
+      },
+      {
+        userId: students[2].id,
+        lessonId: course1LessonIds[1],
+        body: "Set up the tsconfig the same way in my side project.",
+        createdAt: daysAgo(29),
+        updatedAt: daysAgo(27),
+      },
+    ])
+    .run();
+
+  console.log(
+    `Created ${countRows(schema.bookmarks)} bookmarks and ${countRows(schema.notes)} notes.`
+  );
+
   // ─── Quiz Attempts ───
 
   // Helper to record a quiz attempt with answers
